@@ -3,6 +3,7 @@ import requests
 import os
 from datetime import datetime
 import json
+import base64
 
 # Page configuration
 st.set_page_config(page_title="RAG Chatbot", layout="wide", initial_sidebar_state="collapsed")
@@ -39,11 +40,14 @@ st.sidebar.write("---")
 if st.sidebar.button("🏠 Home", use_container_width=True):
     st.session_state.page = "home"
 
-if st.session_state.document_uploaded:
+if st.session_state.document_uploaded or st.session_state.uploaded_documents:
     if st.sidebar.button("💬 Chat", use_container_width=True):
         st.session_state.page = "chat"
+    if st.sidebar.button("🗃 Documents", use_container_width=True):
+        st.session_state.page = "uploaded_documents"
     if st.sidebar.button("📜 History", use_container_width=True):
         st.session_state.page = "history"
+    
 
 # New Chat button
 st.sidebar.write("---")
@@ -120,7 +124,7 @@ if st.session_state.page == "home":
         This is an intelligent chatbot powered by Retrieval-Augmented Generation (RAG).
         
         **Features:**
-        - 📄 Upload your documents
+        - 📄 Upload and view your documents
         - 💬 Chat with AI about your documents
         - 📜 View complete chat history
         - 🔄 Start new conversations anytime
@@ -144,9 +148,10 @@ if st.session_state.page == "home":
                 status.info("📤 Uploading document...")
 
                 try:
+                    upload_f = uploaded_file.getvalue()
                     upload_url = "https://liekdagux0.execute-api.ap-southeast-2.amazonaws.com/data" # need to change
                     headers = {"filename": os.path.basename(uploaded_file.name)}
-                    files = {"file": (uploaded_file.name, uploaded_file, uploaded_file.type)}
+                    files = {"file": (uploaded_file.name, upload_f, uploaded_file.type)}
                     response = requests.post(upload_url, files=files, headers=headers)
 
                     if response.status_code == 200:
@@ -154,7 +159,8 @@ if st.session_state.page == "home":
                         st.session_state.document_id = uploaded_file.name
                         st.session_state.uploaded_documents.append({
                             "name": uploaded_file.name,
-                            "uploaded_at": datetime.now()
+                            "uploaded_at": datetime.now(),
+                            "file": upload_f
                         })
                         if not st.session_state.selected_document:
                             st.session_state.selected_document = uploaded_file.name
@@ -180,6 +186,10 @@ if st.session_state.page == "home":
         if st.session_state.uploaded_documents:
             if st.button("Start Chatting"):
                 st.session_state.page = "chat"
+                st.rerun()
+
+            if st.button("View Documents"):
+                st.session_state.page = "uploaded_documents"
                 st.rerun()
 
 # PAGE 2: CHAT PAGE
@@ -305,6 +315,30 @@ elif st.session_state.page == "chat":
             finally:
                 st.session_state.waiting = False
                 st.rerun()
+
+#New Page
+elif st.session_state.page == "uploaded_documents":
+    st.title("📄 Uploaded Documents")
+    
+    if not st.session_state.uploaded_documents:
+        st.info("No documents uploaded yet. Please upload a document first!")
+    else:
+        for idx, doc in enumerate(st.session_state.uploaded_documents):
+            with st.expander(f"Document {idx + 1} - {doc['name']} (Uploaded at: {doc['uploaded_at'].strftime('%Y-%m-%d %H:%M:%S')})"):
+                st.write(f"**Document Name:** {doc['name']}")
+                pdf_base64 = base64.b64encode(doc["file"]).decode("utf-8")
+                pdf_display = f"""
+                <iframe src="data:application/pdf;base64,{pdf_base64}" width="100%" height="600px" type="application/pdf">
+                </iframe>
+                """
+                st.markdown(pdf_display, unsafe_allow_html=True)
+
+                if st.button(f"Select '{doc['name']}' for Chatting", key=f"select_doc_{idx}"):
+                    st.session_state.selected_document = doc["name"]
+                    st.session_state.document_id = doc["name"]
+                    st.session_state.current_chat = []
+                    st.session_state.page = "chat"
+                    st.rerun()
 
 # PAGE 3: CHAT HISTORY PAGE
 elif st.session_state.page == "history":
