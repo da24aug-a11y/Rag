@@ -24,7 +24,7 @@ jobs:
             pkill -f "streamlit run" || true
             sleep 2
 
-            nohup streamlit run Frontend/trial.py \
+            nohup ~/myvenv/bin/streamlit run Frontend/trial.py \
               --server.address 0.0.0.0 \
               --server.port 8501 \
               > streamlit.log 2>&1 < /dev/null &
