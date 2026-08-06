@@ -15,13 +15,14 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
-          key: ${{ secrets.EC2_KEY }}
-          script: | cd ~/Rag
-                    git pull origin master
-                    source ~/myvenv/bin/activate
-                    pkill -f streamlit || true
-                    nohup streamlit run Frontend/trial.py \ 
-                      --server.address 0.0.0.0 \ 
-                      --server.port 8501 \ 
-                      > streamlit.log 2>&1 &
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: | 
+            cd ~/Rag
+            git pull origin master
+            source ~/myvenv/bin/activate
+            pkill -f streamlit || true
+            nohup streamlit run Frontend/trial.py \ 
+              --server.address 0.0.0.0 \ 
+              --server.port 8501 \ 
+              > streamlit.log 2>&1 &
               
