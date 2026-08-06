@@ -21,9 +21,6 @@ jobs:
             git pull origin master
             source ~/myvenv/bin/activate
 
-            pkill -f "streamlit run" || true
-            sleep 2
-
             nohup ~/myvenv/bin/streamlit run Frontend/trial.py \
               --server.address 0.0.0.0 \
               --server.port 8501 \
