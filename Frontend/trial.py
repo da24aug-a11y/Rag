@@ -33,7 +33,7 @@ if st.session_state.uploaded_documents:
     st.session_state.document_uploaded = True
 
 # Sidebar
-st.sidebar.title("🤖 RAG Chatbot")
+st.sidebar.title("RAG Chatbot")
 
 # Navigation in sidebar
 st.sidebar.write("---")
