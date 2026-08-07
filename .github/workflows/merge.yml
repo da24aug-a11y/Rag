@@ -1,0 +1,32 @@
+name: Check and merge
+on:
+  push:
+    branches-ignore:
+      - master
+permissions:
+  contents: write
+jobs:
+  check-and-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      
+      - name: Check Syntax
+        run: |
+          python -m py_compile Frontend/trial.py
+
+      - name: Merge to master
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+
+          git fetch origin master
+          git checkout master
+          git merge origin/${{ github.ref_name }}
+          git push origin master
