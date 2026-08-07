@@ -25,15 +25,12 @@ jobs:
           python -m py_compile Frontend/trial.py
 
       - name: Merge to master
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create \
-            --base master \
-            --head "${{ github.ref_name }}" \
-            --title "Auto Merge: ${{ github.ref_name }}" \
-            --body "This was automatically created after syntax check passed." \  
-
-          gh pr merge "${{ github.ref_name }}" \
-            --merge \
-            --delete-branch \
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin master
+          git fetch origin ${{ github.ref_name }}
+          git checkout -B master origin/master
+          git merge --no-ff origin/${{ github.ref_name }} \
+            -m "Auto merge branch '${{ github.ref_name }}' into master"
+          git push origin master
