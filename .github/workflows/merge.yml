@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -27,6 +29,8 @@ jobs:
           git config --global user.email "github-actions@github.com"
 
           git fetch origin master
+          git fetch origin ${{ github.ref_name }}
+          
           git checkout master
           git merge origin/${{ github.ref_name }}
           git push origin master
