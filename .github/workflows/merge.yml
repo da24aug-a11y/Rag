@@ -5,6 +5,7 @@ on:
       - master
 permissions:
   contents: write
+  pull-requests: write
 jobs:
   check-and-merge:
     runs-on: ubuntu-latest
@@ -31,8 +32,7 @@ jobs:
             --base master \
             --head "${{ github.ref_name }}" \
             --title "Auto Merge: ${{ github.ref_name }}" \
-            --body "This was automatically created after syntax check passed." \
-            || true  
+            --body "This was automatically created after syntax check passed." \  
 
           gh pr merge "${{ github.ref_name }}" \
             --merge \
