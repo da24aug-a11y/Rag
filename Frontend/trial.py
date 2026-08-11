@@ -114,7 +114,7 @@ st.markdown(
 
 # PAGE 1: HOME PAGE
 if st.session_state.page == "home":
-    st.title("RAG Chatbot - Welcome Visitor!")
+    st.title("🤖 RAG Chatbot")
     
     col1, col2 = st.columns([1, 1])
     
