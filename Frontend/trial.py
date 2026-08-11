@@ -184,13 +184,15 @@ if st.session_state.page == "home":
                 st.write(f"- {doc['name']}")
 
         if st.session_state.uploaded_documents:
-            if st.button("Start Chatting"):
-                st.session_state.page = "chat"
-                st.rerun()
-
-            if st.button("View Documents"):
-                st.session_state.page = "uploaded_documents"
-                st.rerun()
+            col1, col2 = st.columns([1, 1])
+            with col1:
+                if st.button("Start Chatting"):
+                    st.session_state.page = "chat"
+                    st.rerun()
+            with col2:
+                if st.button("View Documents"):
+                    st.session_state.page = "uploaded_documents"
+                    st.rerun()
 
 # PAGE 2: CHAT PAGE
 elif st.session_state.page == "chat":
