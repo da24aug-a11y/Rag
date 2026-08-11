@@ -184,7 +184,7 @@ if st.session_state.page == "home":
                 st.write(f"- {doc['name']}")
 
         if st.session_state.uploaded_documents:
-            left,col1,col2 = st.columns([1,2,2])
+            left,col1,col2,right = st.columns([0.5,2,2,0.5])
             with col1:
                 if st.button("Start Chatting"):
                     st.session_state.page = "chat"
