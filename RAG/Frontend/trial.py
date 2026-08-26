@@ -126,7 +126,7 @@ if st.session_state.page == "home":
         **Features:**
         - 📄 Upload and view your documents
         - 💬 Chat with AI about your documents
-        - 📜 View complete chat history
+        - 📜 View your complete chat history
         - 🔄 Start new conversations anytime
         """)
     
