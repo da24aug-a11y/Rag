@@ -119,7 +119,7 @@ if st.session_state.page == "home":
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        st.write("## Welcome to RAG Chatbot!")
+        st.write("## Welcome to RAG Chatbot!!")
         st.write("""
         This is an intelligent chatbot powered by Retrieval-Augmented Generation (RAG).
         
