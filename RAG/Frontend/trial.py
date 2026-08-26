@@ -114,19 +114,19 @@ st.markdown(
 
 # PAGE 1: HOME PAGE
 if st.session_state.page == "home":
-    st.title("RAG Chatbot - Welcome")
+    st.title("🤖 Chat with your doc")
     
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        st.write("## Welcome to RAG Chatbot!!")
+        st.write("## Welcome to RAG Chatbot!")
         st.write("""
         This is an intelligent chatbot powered by Retrieval-Augmented Generation (RAG).
         
         **Features:**
         - 📄 Upload and view your documents
         - 💬 Chat with AI about your documents
-        - 📜 View your complete chat history
+        - 📜 View complete chat history
         - 🔄 Start new conversations anytime
         """)
     
@@ -184,13 +184,15 @@ if st.session_state.page == "home":
                 st.write(f"- {doc['name']}")
 
         if st.session_state.uploaded_documents:
-            if st.button("Start Chatting"):
-                st.session_state.page = "chat"
-                st.rerun()
-
-            if st.button("View Documents"):
-                st.session_state.page = "uploaded_documents"
-                st.rerun()
+            left,col1,col2,right = st.columns([0.5,2,2,0.5])
+            with col1:
+                if st.button("Start Chatting"):
+                    st.session_state.page = "chat"
+                    st.rerun()
+            with col2:
+                if st.button("View Documents"):
+                    st.session_state.page = "uploaded_documents"
+                    st.rerun()
 
 # PAGE 2: CHAT PAGE
 elif st.session_state.page == "chat":
